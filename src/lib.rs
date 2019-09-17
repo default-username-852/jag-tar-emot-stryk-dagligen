@@ -472,6 +472,10 @@ impl Position {
         }
         return None;
     }
+
+    pub fn get_x(&self) -> u8 { self.x }
+
+    pub fn get_y(&self) -> u8 { self.y }
 }
 
 #[derive(Copy, Clone, Debug)]
