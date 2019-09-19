@@ -230,6 +230,20 @@ fn test_castling() {
 }
 
 #[test]
+fn test_standard_castling() {
+    let mut board = Board::new(Board::get_standard_layout());
+
+    board.take_move("e2-e4".to_string());
+    board.take_move("e7-e5".to_string());
+    board.take_move("f1-a6".to_string());
+    board.take_move("f8-a3".to_string());
+    board.take_move("g1-f3".to_string());
+    board.take_move("g8-f6".to_string());
+    board.take_move("e1-g1".to_string());
+    board.take_move("e8-g8".to_string());
+}
+
+#[test]
 #[should_panic]
 fn test_bad_castling() {
     let mut pieces: Vec<Piece> = Vec::new();
@@ -343,7 +357,24 @@ fn test_game_states() {
     assert_eq!(board3.get_game_state(), GameState::Check(Color::Black));
 }
 
-#[derive(Copy, Clone, Debug)]
+#[test]
+fn test_standard_board() {
+    let mut board = Board::new(Board::get_standard_layout());
+
+    board.take_move("e2-e4".to_string());
+
+    assert!(board.get_piece_at(Position::new(5, 4)).is_some());
+    assert!(!board.get_piece_at(Position::new(5, 5)).is_some());
+    assert_eq!(board.get_piece_at(Position::new(5, 4)).unwrap().color, Color::White);
+
+    board.take_move("a7-a5".to_string());
+
+    assert!(board.get_piece_at(Position::new(1, 5)).is_some());
+    assert!(!board.get_piece_at(Position::new(1, 4)).is_some());
+    assert_eq!(board.get_piece_at(Position::new(1, 5)).unwrap().color, Color::Black);
+}
+
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum PieceType {
     King,
     Queen,
@@ -374,7 +405,7 @@ impl PieceType {
         }
     }
 
-    fn is_pawn(&self) -> bool {
+    pub fn is_pawn(&self) -> bool {
         match self {
             PieceType::Pawn => { true }
             _ => { false }
@@ -506,42 +537,42 @@ enum MoveType {
     Normal,
     Passant(Position),
     Castling(bool),
-    Promotion(),
+    Promotion,
 }
 
-impl MoveType {
-    fn same_as(&self, move_type: &MoveType) -> bool {
+impl PartialEq for MoveType {
+    fn eq(&self, other: &Self) -> bool {
         match &self {
             MoveType::Normal => {
-                match move_type {
+                match other {
                     MoveType::Normal => { true }
                     MoveType::Passant(_) => { false }
                     MoveType::Castling(_) => { false }
-                    MoveType::Promotion() => { false }
+                    MoveType::Promotion => { false }
                 }
             }
             MoveType::Passant(_) => {
-                match move_type {
+                match other {
                     MoveType::Normal => { false }
                     MoveType::Passant(_) => { true }
                     MoveType::Castling(_) => { false }
-                    MoveType::Promotion() => { false }
+                    MoveType::Promotion => { false }
                 }
             }
             MoveType::Castling(_) => {
-                match move_type {
+                match other {
                     MoveType::Normal => { false }
                     MoveType::Passant(_) => { false }
                     MoveType::Castling(_) => { true }
-                    MoveType::Promotion() => { false }
+                    MoveType::Promotion => { false }
                 }
             }
-            MoveType::Promotion() => {
-                match move_type {
+            MoveType::Promotion => {
+                match other {
                     MoveType::Normal => { false }
                     MoveType::Passant(_) => { false }
                     MoveType::Castling(_) => { false }
-                    MoveType::Promotion() => { true }
+                    MoveType::Promotion => { true }
                 }
             }
         }
@@ -563,28 +594,30 @@ impl Piece {
                 //TODO: this could use a refactor
                 let mut possible_directions: Vec<((i8, i8), MoveType)> = Vec::new();
 
+                let home_side_y = if self.color == Color::White { 1 } else { 8 };
+
                 //Check if king has moved
                 if board.play_history.iter().find(|mov|
-                    mov.start_position == Position::new(5, if self.color == Color::White { 1 } else { 8 })).is_none()
-                    && board.get_piece_at(Position::new(5, if self.color == Color::White { 1 } else { 8 })).is_some() {
+                    mov.start_position == Position::new(5, home_side_y)).is_none()
+                    && board.get_piece_at(Position::new(5, home_side_y)).is_some() {
                     //Check if rook for kingside castling has moved
                     if board.play_history.iter().find(|mov|
-                        mov.start_position == Position::new(8, if self.color == Color::White { 1 } else { 8 })).is_none()
-                        && board.get_piece_at(Position::new(8, if self.color == Color::White { 1 } else { 8 })).is_some() {
+                        mov.start_position == Position::new(8, home_side_y)).is_none()
+                        && board.get_piece_at(Position::new(8, home_side_y)).is_some() {
                         //Check if any pieces are in the way
-                        if board.get_piece_at(Position::new(6, 1)).is_none() && board.get_piece_at(Position::new(7, 1)).is_none() {
+                        if board.get_piece_at(Position::new(6, home_side_y)).is_none() && board.get_piece_at(Position::new(7, home_side_y)).is_none() {
                             possible_directions.push(((2i8, 0), MoveType::Castling(false)));
                         }
                     }
 
                     //Check if rook for queenside castling has moved
                     if board.play_history.iter().find(|mov|
-                        mov.start_position == Position::new(1, if self.color == Color::White { 1 } else { 8 })).is_none()
-                        && board.get_piece_at(Position::new(1, if self.color == Color::White { 1 } else { 8 })).is_some() {
+                        mov.start_position == Position::new(1, home_side_y)).is_none()
+                        && board.get_piece_at(Position::new(1, home_side_y)).is_some() {
                         //Check if any pieces are in the way
-                        if board.get_piece_at(Position::new(4, 1)).is_none()
-                            && board.get_piece_at(Position::new(3, 1)).is_none()
-                            && board.get_piece_at(Position::new(2, 1)).is_none() {
+                        if board.get_piece_at(Position::new(4, home_side_y)).is_none()
+                            && board.get_piece_at(Position::new(3, home_side_y)).is_none()
+                            && board.get_piece_at(Position::new(2, home_side_y)).is_none() {
                             possible_directions.push(((-2i8, 0), MoveType::Castling(true)));
                         }
                     }
@@ -633,12 +666,17 @@ impl Piece {
                     }
                 }
 
-                let move_type: MoveType = if promotes { MoveType::Promotion() } else { MoveType::Normal };
+                let move_type: MoveType = if promotes { MoveType::Promotion } else { MoveType::Normal };
 
-                possible_directions.push(((0i8, direction_from_color), move_type));
-                match &self.position.position_at_offset(&(0, direction_from_color * 2)) {
-                    Some(_) => {
-                        if (self.position.y == 2 && self.color == Color::White) || (self.position.y == 7 && self.color == Color::Black) {
+                if let Some(position) = self.position.position_at_offset(&(0i8, direction_from_color)){
+                    if board.get_piece_at(position).is_none() {
+                        possible_directions.push(((0i8, direction_from_color), move_type));
+                    }
+                }
+
+                match self.position.position_at_offset(&(0, direction_from_color * 2)) {
+                    Some(position) => {
+                        if ((self.position.y == 2 && self.color == Color::White) || (self.position.y == 7 && self.color == Color::Black)) && board.get_piece_at(position).is_none() {
                             possible_directions.push(((0, direction_from_color * 2), move_type));
                         }
                     }
@@ -646,13 +684,13 @@ impl Piece {
                 }
 
                 for side_direction in &[-1i8, 1i8] {
-                    match &self.position.position_at_offset(&(*side_direction, direction_from_color)) {
+                    match self.position.position_at_offset(&(*side_direction, direction_from_color)) {
                         Some(new_position) => {
                             let mut new_position_occupied: bool = false;
 
                             //Checks for a piece in the diagonal direction to capture
                             for piece in &board.pieces {
-                                if piece.position == *new_position {
+                                if piece.position == new_position {
                                     if piece.color == self.color {} else {
                                         possible_directions.push(((*side_direction, direction_from_color), move_type));
                                         new_position_occupied = true;
@@ -773,7 +811,7 @@ impl Piece {
                         }
                         &possible_moves.push(Move::new(self.piece_type.clone(), self.color.clone(),
                                                        self.position.clone(), position_moving_to.clone(),
-                                                       false || move_type.same_as(&MoveType::Passant(Position::new(1, 1))), move_type));
+                                                       false || move_type == MoveType::Passant(Position::new(1, 1)), move_type));
                     }
                     None => {
                         break;
@@ -832,9 +870,9 @@ impl Board {
         return out;
     }
 
-    pub fn get_current_player_moves(&self) -> Vec<(&Piece, Vec<Position>)> {
+    pub fn get_current_player_moves(&self) -> Vec<(&Piece, Vec<(Position, bool)>)> { //Returns the piece, the position it can move to, and if it requires a piece type to promote to
         return self.get_available_moves(self.current_turn).iter()
-            .map(|t| (t.0, t.1.iter().map(|mov| mov.end_position.clone()).collect())).collect();
+            .map(|t| (t.0, t.1.iter().map(|mov| (mov.end_position.clone(), mov.move_type == MoveType::Promotion)).collect())).collect();
     }
 
     pub fn get_standard_layout() -> Vec<Piece> {
@@ -930,7 +968,7 @@ impl Board {
                                 self.get_piece_at_mut(Position::new(if queenside { 1 } else { 8 }, piece_move.0.position.y)).unwrap()
                                     .set_position(Position::new(if queenside { 4 } else { 6 }, piece_move.0.position.y));
                             }
-                            MoveType::Promotion() => {
+                            MoveType::Promotion => {
                                 if possible_move.captures_piece {
                                     self.remove_piece_at_position(possible_move.end_position);
                                 }
@@ -970,7 +1008,7 @@ impl Board {
         out
     }
 
-    pub fn take_move(&mut self, notated_move: String) {
+    pub fn take_move(&mut self, notated_move: String) { //Takes a move of the type "e2-e4=Q"
         let strings: Vec<char> = notated_move.chars().filter(|c| *c != '=' && *c != '-').collect();
 
         self.move_piece_at(Position::new((*strings.get(0).unwrap() as u32 - 96) as u8, (*strings.get(1).unwrap() as u32 - 48) as u8),
@@ -1043,6 +1081,10 @@ impl Board {
 
     pub fn get_pieces(&self) -> Vec<&Piece> {
         self.pieces.iter().map(|piece| piece).collect()
+    }
+
+    pub fn get_current_player(&self) -> Color {
+        self.current_turn
     }
 }
 
