@@ -249,7 +249,7 @@ fn test_chess_notation() {
 
     let mut board = Board::new(pieces);
 
-    board.take_move("b2-d4".to_string());
+    board.take_move("b2-d4".to_string()).expect("");
 
     assert!(board.get_piece_at(Position::new(4, 4)).is_some());
 }
@@ -337,7 +337,7 @@ fn test_game_states() {
 fn test_standard_board() {
     let mut board = Board::new(Board::get_standard_layout());
 
-    board.take_move("e2-e4".to_string());
+    board.take_move("e2-e4".to_string()).expect("");
 
     assert!(board.get_piece_at(Position::new(5, 4)).is_some());
     assert!(!board.get_piece_at(Position::new(5, 5)).is_some());
