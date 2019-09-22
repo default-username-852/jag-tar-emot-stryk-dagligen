@@ -1,1 +1,1 @@
-# eskilq-hw1
+# Schack typ
