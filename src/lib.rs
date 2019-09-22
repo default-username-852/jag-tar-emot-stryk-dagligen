@@ -100,7 +100,7 @@ fn test_en_passant() {
 
     let mut board = Board::new(pieces);
 
-    board.take_move("f2-f4".to_string());
+    board.take_move("f2-f4".to_string()).expect("");
 
     let available_moves = board.get_available_moves(Color::Black);
     let mut black_pawn_moves = Vec::new();
@@ -112,7 +112,7 @@ fn test_en_passant() {
 
     assert_eq!(black_pawn_moves.len(), 2);
 
-    board.take_move("e4-f3".to_string());
+    board.take_move("e4-f3".to_string()).expect("");
 
     assert_eq!(board.play_history.len(), 2);
     assert_eq!(board.pieces.len(), 3);
@@ -175,8 +175,8 @@ fn test_promotion() {
 
     assert_eq!(board.pieces.len(), 6);
 
-    board.take_move("f7-g8=Q".to_string());
-    board.take_move("f2-f1=Q".to_string());
+    board.take_move("f7-g8=Q".to_string()).expect("");
+    board.take_move("f2-f1=Q".to_string()).expect("");
 
     assert_eq!(board.pieces.len(), 5);
     assert!(board.get_piece_at(Position::new(6, 1)).is_some());
@@ -221,8 +221,8 @@ fn test_castling() {
 
     let mut board = Board::new(pieces);
 
-    board.take_move("e1-g1".to_string());
-    board.take_move("e8-c8".to_string());
+    board.take_move("e1-g1".to_string()).expect("");
+    board.take_move("e8-c8".to_string()).expect("");
     assert!(board.get_piece_at(Position::new(3, 8)).is_some());
     assert!(board.get_piece_at(Position::new(4, 8)).is_some());
     assert!(board.get_piece_at(Position::new(7, 1)).is_some());
@@ -233,18 +233,17 @@ fn test_castling() {
 fn test_standard_castling() {
     let mut board = Board::new(Board::get_standard_layout());
 
-    board.take_move("e2-e4".to_string());
-    board.take_move("e7-e5".to_string());
-    board.take_move("f1-a6".to_string());
-    board.take_move("f8-a3".to_string());
-    board.take_move("g1-f3".to_string());
-    board.take_move("g8-f6".to_string());
-    board.take_move("e1-g1".to_string());
-    board.take_move("e8-g8".to_string());
+    board.take_move("e2-e4".to_string()).expect("");
+    board.take_move("e7-e5".to_string()).expect("");
+    board.take_move("f1-a6".to_string()).expect("");
+    board.take_move("f8-a3".to_string()).expect("");
+    board.take_move("g1-f3".to_string()).expect("");
+    board.take_move("g8-f6".to_string()).expect("");
+    board.take_move("e1-g1".to_string()).expect("");
+    board.take_move("e8-g8".to_string()).expect("");
 }
 
 #[test]
-#[should_panic]
 fn test_bad_castling() {
     let mut pieces: Vec<Piece> = Vec::new();
 
@@ -283,7 +282,7 @@ fn test_bad_castling() {
 
     let mut board = Board::new(pieces);
 
-    board.move_piece_at(Position::new(5, 1), Position::new(7, 1), None);
+    assert!(board.move_piece_at(Position::new(5, 1), Position::new(7, 1), None).is_err());
 }
 
 #[test]
@@ -367,7 +366,7 @@ fn test_standard_board() {
     assert!(!board.get_piece_at(Position::new(5, 5)).is_some());
     assert_eq!(board.get_piece_at(Position::new(5, 4)).unwrap().color, Color::White);
 
-    board.take_move("a7-a5".to_string());
+    board.take_move("a7-a5".to_string()).expect("");
 
     assert!(board.get_piece_at(Position::new(1, 5)).is_some());
     assert!(!board.get_piece_at(Position::new(1, 4)).is_some());
@@ -831,7 +830,7 @@ impl Board {
                 'q' => { piece_type = PieceType::Queen }
                 'k' => { piece_type = PieceType::King }
                 'p' => { piece_type = PieceType::Pawn }
-                _ => { panic!("Char {} does not match a piece type", piece_prototype.1) }
+                _ => { unreachable!("Char {} does not match a piece type", piece_prototype.1) }
             }
 
             &standard_layout.push(Piece {
@@ -864,11 +863,11 @@ impl Board {
         return None;
     }
 
-    fn move_piece_at(&mut self, piece_position: Position, target_position: Position, promote_to: Option<PieceType>) {
+    fn move_piece_at(&mut self, piece_position: Position, target_position: Position, promote_to: Option<PieceType>) -> Result<(), String> {
         let piece_color = self.get_piece_at(piece_position).unwrap().color.clone();
 
         if !(piece_color == self.current_turn) {
-            panic!(format!("Tried to move a {} piece even though it's {}'s turn", piece_color, self.current_turn));
+            return Err(format!("Tried to move a {} piece even though it's {}'s turn", piece_color, self.current_turn));
         }
 
         let mut available_moves_clone: Vec<(Piece, Vec<Move>)> = Vec::new();
@@ -909,10 +908,10 @@ impl Board {
                                     self.remove_piece_at_position(possible_move.end_position);
                                 }
                                 if promote_to.is_none() {
-                                    panic!("Piece is trying to promote but cant because it didn't receive a type to promote to")
+                                    return Err("Piece is trying to promote but cant because it didn't receive a type to promote to".to_string());
                                 }
                                 if promote_to.unwrap().is_king() {
-                                    panic!("Can't promote to king")
+                                    return Err("Can't promote to king".to_string());
                                 }
                                 self.get_piece_at_mut(piece_move.0.position.clone()).unwrap().piece_type = promote_to.unwrap().clone();
                                 self.get_piece_at_mut(piece_move.0.position.clone()).unwrap().set_position(possible_move.end_position.clone());
@@ -922,14 +921,16 @@ impl Board {
                     }
                 }
                 if !target_available {
-                    panic!(format!("Can't move piece at {} to {}", piece_move.0.position, target_position));
+                    return Err(format!("Can't move piece at {} to {}", piece_move.0.position, target_position));
                 }
             }
         }
 
         if !found_piece {
-            panic!(format!("Didn't find a piece at {}", piece_position));
+            return Err(format!("Didn't find a piece at {}", piece_position));
         }
+
+        Ok(())
     }
 
     fn remove_piece_at_position(&mut self, position: Position) {
@@ -944,7 +945,7 @@ impl Board {
         out
     }
 
-    pub fn take_move(&mut self, notated_move: String) { //Takes a move of the type "e2-e4=Q"
+    pub fn take_move(&mut self, notated_move: String) -> Result<(), String> { //Takes a move of the type "e2-e4=Q"
         let strings: Vec<char> = notated_move.chars().filter(|c| *c != '=' && *c != '-').collect();
 
         self.move_piece_at(Position::new((*strings.get(0).unwrap() as u32 - 96) as u8, (*strings.get(1).unwrap() as u32 - 48) as u8),
@@ -962,12 +963,14 @@ impl Board {
                                    }
                                }
                                None => { None }
-                           });
+                           })?;
 
         match self.current_turn {
             Color::Black => { self.current_turn = Color::White; }
             Color::White => { self.current_turn = Color::Black; }
         }
+
+        Ok(())
     }
 
     pub fn get_game_state(&self) -> GameState {
