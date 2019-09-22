@@ -413,7 +413,7 @@ impl PieceType {
     }
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Color {
     White,
     Black,
@@ -428,25 +428,6 @@ impl fmt::Display for Color {
     }
 }
 
-impl PartialEq for Color {
-    fn eq(&self, other: &Self) -> bool {
-        match other {
-            Color::White => {
-                match self {
-                    Color::White => { true }
-                    Color::Black => { false }
-                }
-            }
-            Color::Black => {
-                match self {
-                    Color::White => { false }
-                    Color::Black => { true }
-                }
-            }
-        }
-    }
-}
-
 impl Color {
     pub fn invert(&self) -> Color {
         match self {
@@ -456,16 +437,10 @@ impl Color {
     }
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Position {
     x: u8,
     y: u8,
-}
-
-impl PartialEq for Position {
-    fn eq(&self, other: &Self) -> bool {
-        self.y == other.y && self.x == other.x
-    }
 }
 
 impl fmt::Display for Position {
@@ -532,51 +507,12 @@ impl Move {
     }
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 enum MoveType {
     Normal,
     Passant(Position),
     Castling(bool),
     Promotion,
-}
-
-impl PartialEq for MoveType {
-    fn eq(&self, other: &Self) -> bool {
-        match &self {
-            MoveType::Normal => {
-                match other {
-                    MoveType::Normal => { true }
-                    MoveType::Passant(_) => { false }
-                    MoveType::Castling(_) => { false }
-                    MoveType::Promotion => { false }
-                }
-            }
-            MoveType::Passant(_) => {
-                match other {
-                    MoveType::Normal => { false }
-                    MoveType::Passant(_) => { true }
-                    MoveType::Castling(_) => { false }
-                    MoveType::Promotion => { false }
-                }
-            }
-            MoveType::Castling(_) => {
-                match other {
-                    MoveType::Normal => { false }
-                    MoveType::Passant(_) => { false }
-                    MoveType::Castling(_) => { true }
-                    MoveType::Promotion => { false }
-                }
-            }
-            MoveType::Promotion => {
-                match other {
-                    MoveType::Normal => { false }
-                    MoveType::Passant(_) => { false }
-                    MoveType::Castling(_) => { false }
-                    MoveType::Promotion => { true }
-                }
-            }
-        }
-    }
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -1088,49 +1024,10 @@ impl Board {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum GameState {
     Normal,
     Check(Color),
     Checkmate(Color),
     Draw,
-}
-
-impl PartialEq for GameState {
-    fn eq(&self, other: &Self) -> bool {
-        match other {
-            GameState::Draw => {
-                match self {
-                    GameState::Draw => { true }
-                    GameState::Normal => { false }
-                    GameState::Check(_) => { false }
-                    GameState::Checkmate(_) => { false }
-                }
-            }
-            GameState::Normal => {
-                match self {
-                    GameState::Draw => { false }
-                    GameState::Normal => { true }
-                    GameState::Check(_) => { false }
-                    GameState::Checkmate(_) => { false }
-                }
-            }
-            GameState::Check(a) => {
-                match self {
-                    GameState::Draw => { false }
-                    GameState::Normal => { false }
-                    GameState::Check(b) => { a == b }
-                    GameState::Checkmate(_) => { false }
-                }
-            }
-            GameState::Checkmate(a) => {
-                match self {
-                    GameState::Draw => { false }
-                    GameState::Normal => { false }
-                    GameState::Check(_) => { false }
-                    GameState::Checkmate(b) => { a == b }
-                }
-            }
-        }
-    }
 }
