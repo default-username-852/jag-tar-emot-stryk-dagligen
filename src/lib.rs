@@ -870,6 +870,11 @@ impl Piece {
                             }
 
                             if king_gets_threatened {
+                                let mut index: usize = 0;
+                                if (&position_moving_to)
+                                    .exist_in_vec(&board.get_occupied_squares(), &mut index) {
+                                    break;
+                                }
                                 continue;
                             }
                         }
