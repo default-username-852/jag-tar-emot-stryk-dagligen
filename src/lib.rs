@@ -712,7 +712,11 @@ impl Piece {
                                             if piece.position == side_position.clone() {
                                                 if piece.color == self.color {
                                                 } else {
-                                                    if board.play_history.len() == 0 || piece.piece_type != PieceType::Pawn {
+                                                    if board.play_history.len() == 0 || side_position
+                                                        .position_at_offset(&(
+                                                            0i8,
+                                                            direction_from_color * 2,
+                                                        )).is_none() {
                                                         continue;
                                                     }
                                                     if board
