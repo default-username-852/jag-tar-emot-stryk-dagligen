@@ -675,7 +675,17 @@ impl Piece {
                             || (self.position.y == 7 && self.color == Color::Black))
                             && board.get_piece_at(position).is_none()
                         {
-                            possible_directions.push(((0, direction_from_color * 2), move_type));
+                            if board
+                                .get_piece_at(
+                                    self.position
+                                        .position_at_offset(&(0, direction_from_color))
+                                        .unwrap(),
+                                )
+                                .is_none()
+                            {
+                                possible_directions
+                                    .push(((0, direction_from_color * 2), move_type));
+                            }
                         }
                     }
                     None => {}
@@ -712,11 +722,14 @@ impl Piece {
                                             if piece.position == side_position.clone() {
                                                 if piece.color == self.color {
                                                 } else {
-                                                    if board.play_history.len() == 0 || side_position
-                                                        .position_at_offset(&(
-                                                            0i8,
-                                                            direction_from_color * 2,
-                                                        )).is_none() {
+                                                    if board.play_history.len() == 0
+                                                        || side_position
+                                                            .position_at_offset(&(
+                                                                0i8,
+                                                                direction_from_color * 2,
+                                                            ))
+                                                            .is_none()
+                                                    {
                                                         continue;
                                                     }
                                                     if board
@@ -876,7 +889,8 @@ impl Piece {
                             if king_gets_threatened {
                                 let mut index: usize = 0;
                                 if (&position_moving_to)
-                                    .exist_in_vec(&board.get_occupied_squares(), &mut index) {
+                                    .exist_in_vec(&board.get_occupied_squares(), &mut index)
+                                {
                                     break;
                                 }
                                 continue;
@@ -1054,7 +1068,7 @@ impl Board {
         return standard_layout;
     }
 
-    fn get_piece_at(&self, position: Position) -> Option<&Piece> {
+    pub fn get_piece_at(&self, position: Position) -> Option<&Piece> {
         for piece in &self.pieces {
             if piece.position == position {
                 return Some(&piece);
@@ -1290,6 +1304,18 @@ impl Board {
 
     pub fn get_current_player(&self) -> Color {
         self.current_turn
+    }
+
+    pub fn get_possible_moves_from_position(
+        &self,
+        position: Position,
+    ) -> Option<Vec<(Position, bool)>> {
+        for piece in self.get_current_player_moves() {
+            if piece.0.get_position() == position {
+                return Some(piece.1);
+            }
+        }
+        None
     }
 }
 
