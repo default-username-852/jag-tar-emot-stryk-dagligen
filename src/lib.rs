@@ -19,7 +19,7 @@ fn test_piece() {
     let piece = Piece {
         position: Position { x: 3, y: 3 },
         color: Color::Black,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     };
 
     assert_eq!(piece.color, Color::Black);
@@ -33,17 +33,17 @@ fn test_check() {
     pieces.push(Piece {
         position: Position { x: 4, y: 1 },
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 8, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 4, y: 4 },
         color: Color::Black,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
 
     let board: Board = Board::new(pieces);
@@ -62,22 +62,22 @@ fn test_en_passant() {
     pieces.push(Piece {
         position: Position { x: 1, y: 1 },
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 1, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 5, y: 4 },
         color: Color::Black,
-        piece_type: PieceType::Pawn,
+        piece_type: PieceType::Pawn
     });
     pieces.push(Piece {
         position: Position { x: 6, y: 2 },
         color: Color::White,
-        piece_type: PieceType::Pawn,
+        piece_type: PieceType::Pawn
     });
 
     let mut board = Board::new(pieces);
@@ -107,32 +107,32 @@ fn test_promotion() {
     pieces.push(Piece {
         position: Position { x: 1, y: 1 },
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 1, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 2, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::Knight,
+        piece_type: PieceType::Knight
     });
     pieces.push(Piece {
         position: Position { x: 6, y: 2 },
         color: Color::Black,
-        piece_type: PieceType::Pawn,
+        piece_type: PieceType::Pawn
     });
     pieces.push(Piece {
         position: Position { x: 6, y: 7 },
         color: Color::White,
-        piece_type: PieceType::Pawn,
+        piece_type: PieceType::Pawn
     });
     pieces.push(Piece {
         position: Position { x: 7, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
 
     let mut board = Board::new(pieces);
@@ -153,22 +153,22 @@ fn test_castling() {
     pieces.push(Piece {
         position: Position { x: 5, y: 1 },
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 5, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 1, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
     pieces.push(Piece {
         position: Position { x: 8, y: 1 },
         color: Color::White,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
 
     let mut board = Board::new(pieces);
@@ -202,22 +202,22 @@ fn test_bad_castling() {
     pieces.push(Piece {
         position: Position { x: 5, y: 1 },
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 5, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 7, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
     pieces.push(Piece {
         position: Position { x: 8, y: 1 },
         color: Color::White,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
 
     let mut board = Board::new(pieces);
@@ -234,17 +234,17 @@ fn test_chess_notation() {
     pieces.push(Piece {
         position: Position { x: 5, y: 1 },
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 5, y: 8 },
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces.push(Piece {
         position: Position { x: 2, y: 2 },
         color: Color::White,
-        piece_type: PieceType::Bishop,
+        piece_type: PieceType::Bishop
     });
 
     let mut board = Board::new(pieces);
@@ -261,22 +261,22 @@ fn test_game_states() {
     pieces1.push(Piece {
         position: Position::new(5, 1),
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces1.push(Piece {
         position: Position::new(5, 8),
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces1.push(Piece {
         position: Position::new(5, 7),
         color: Color::White,
-        piece_type: PieceType::Queen,
+        piece_type: PieceType::Queen
     });
     pieces1.push(Piece {
         position: Position::new(5, 6),
         color: Color::White,
-        piece_type: PieceType::Rook,
+        piece_type: PieceType::Rook
     });
     let mut board1 = Board::new(pieces1);
     board1.current_turn = Color::Black;
@@ -288,22 +288,22 @@ fn test_game_states() {
     pieces2.push(Piece {
         position: Position::new(5, 1),
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces2.push(Piece {
         position: Position::new(5, 8),
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces2.push(Piece {
         position: Position::new(6, 6),
         color: Color::White,
-        piece_type: PieceType::Queen,
+        piece_type: PieceType::Queen
     });
     pieces2.push(Piece {
         position: Position::new(6, 5),
         color: Color::White,
-        piece_type: PieceType::Bishop,
+        piece_type: PieceType::Bishop
     });
     let mut board2 = Board::new(pieces2);
     board2.current_turn = Color::Black;
@@ -315,17 +315,17 @@ fn test_game_states() {
     pieces3.push(Piece {
         position: Position::new(5, 1),
         color: Color::White,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces3.push(Piece {
         position: Position::new(5, 8),
         color: Color::Black,
-        piece_type: PieceType::King,
+        piece_type: PieceType::King
     });
     pieces3.push(Piece {
         position: Position::new(7, 1),
         color: Color::Black,
-        piece_type: PieceType::Queen,
+        piece_type: PieceType::Queen
     });
     let mut board3 = Board::new(pieces3);
     board3.current_turn = Color::White;
@@ -363,7 +363,7 @@ pub enum PieceType {
     Rook,
     Bishop,
     Knight,
-    Pawn,
+    Pawn
 }
 
 impl fmt::Display for PieceType {
@@ -374,7 +374,7 @@ impl fmt::Display for PieceType {
             PieceType::Queen => write!(f, "q"),
             PieceType::Rook => write!(f, "r"),
             PieceType::Bishop => write!(f, "b"),
-            PieceType::Knight => write!(f, "n"),
+            PieceType::Knight => write!(f, "n")
         }
     }
 }
@@ -383,14 +383,14 @@ impl PieceType {
     fn is_king(&self) -> bool {
         match self {
             PieceType::King => true,
-            _ => false,
+            _ => false
         }
     }
 
     pub fn is_pawn(&self) -> bool {
         match self {
             PieceType::Pawn => true,
-            _ => false,
+            _ => false
         }
     }
 }
@@ -398,14 +398,14 @@ impl PieceType {
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Color {
     White,
-    Black,
+    Black
 }
 
 impl fmt::Display for Color {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Color::White => write!(f, "White"),
-            Color::Black => write!(f, "Black"),
+            Color::Black => write!(f, "Black")
         }
     }
 }
@@ -414,7 +414,7 @@ impl Color {
     pub fn invert(&self) -> Color {
         match self {
             Color::Black => Color::White,
-            Color::White => Color::Black,
+            Color::White => Color::Black
         }
     }
 }
@@ -422,7 +422,7 @@ impl Color {
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Position {
     x: u8,
-    y: u8,
+    y: u8
 }
 
 impl fmt::Display for Position {
@@ -458,7 +458,7 @@ impl Position {
     fn position_at_offset(&self, offset: &(i8, i8)) -> Option<Position> {
         let new_position = Position::new(
             ((self.x as i8) + offset.0) as u8,
-            (self.y as i8 + offset.1) as u8,
+            (self.y as i8 + offset.1) as u8
         );
         if new_position.on_chess_board() {
             return Some(new_position);
@@ -482,7 +482,7 @@ struct Move {
     start_position: Position,
     end_position: Position,
     captures_piece: bool,
-    move_type: MoveType,
+    move_type: MoveType
 }
 
 impl Move {
@@ -492,7 +492,7 @@ impl Move {
         start_position: Position,
         end_position: Position,
         captures_piece: bool,
-        move_type: MoveType,
+        move_type: MoveType
     ) -> Move {
         Move {
             moved_piece_type,
@@ -500,7 +500,7 @@ impl Move {
             start_position,
             end_position,
             captures_piece,
-            move_type,
+            move_type
         }
     }
 }
@@ -510,14 +510,14 @@ enum MoveType {
     Normal,
     Passant(Position),
     Castling(bool),
-    Promotion,
+    Promotion
 }
 
 #[derive(Copy, Clone, Debug)]
 pub struct Piece {
     position: Position,
     color: Color,
-    piece_type: PieceType,
+    piece_type: PieceType
 }
 
 impl Piece {
@@ -581,12 +581,12 @@ impl Piece {
                         (-1i8, -1i8),
                         (0i8, -1i8),
                         (1i8, -1i8),
-                        (1i8, 0i8),
+                        (1i8, 0i8)
                     ],
                     1i8,
                     board,
                     moving,
-                    MoveType::Normal,
+                    MoveType::Normal
                 );
 
                 for possible_direction in possible_directions {
@@ -596,7 +596,7 @@ impl Piece {
                             1i8,
                             board,
                             moving,
-                            possible_direction.1,
+                            possible_direction.1
                         )
                         .get(0)
                     {
@@ -610,7 +610,7 @@ impl Piece {
                     8i8,
                     board,
                     moving,
-                    MoveType::Normal,
+                    MoveType::Normal
                 );
             }
             PieceType::Knight => {
@@ -623,12 +623,12 @@ impl Piece {
                         (1i8, 2i8),
                         (-1i8, 2i8),
                         (1i8, -2i8),
-                        (-1i8, -2i8),
+                        (-1i8, -2i8)
                     ],
                     1i8,
                     board,
                     moving,
-                    MoveType::Normal,
+                    MoveType::Normal
                 );
             }
             PieceType::Pawn => {
@@ -679,7 +679,7 @@ impl Piece {
                                 .get_piece_at(
                                     self.position
                                         .position_at_offset(&(0, direction_from_color))
-                                        .unwrap(),
+                                        .unwrap()
                                 )
                                 .is_none()
                             {
@@ -726,7 +726,7 @@ impl Piece {
                                                         || side_position
                                                             .position_at_offset(&(
                                                                 0i8,
-                                                                direction_from_color * 2,
+                                                                direction_from_color * 2
                                                             ))
                                                             .is_none()
                                                     {
@@ -746,7 +746,7 @@ impl Piece {
                                                             == side_position
                                                                 .position_at_offset(&(
                                                                     0i8,
-                                                                    direction_from_color * 2,
+                                                                    direction_from_color * 2
                                                                 ))
                                                                 .unwrap()
                                                         && board
@@ -759,8 +759,8 @@ impl Piece {
                                                         possible_directions.push((
                                                             (*side_direction, direction_from_color),
                                                             MoveType::Passant(
-                                                                side_position.clone(),
-                                                            ),
+                                                                side_position.clone()
+                                                            )
                                                         ));
                                                     }
                                                 }
@@ -782,7 +782,7 @@ impl Piece {
                             1i8,
                             board,
                             moving,
-                            possible_direction.1,
+                            possible_direction.1
                         )
                         .get(0)
                     {
@@ -800,12 +800,12 @@ impl Piece {
                         (1i8, 1i8),
                         (-1i8, 1i8),
                         (1i8, -1i8),
-                        (-1i8, -1i8),
+                        (-1i8, -1i8)
                     ],
                     8i8,
                     board,
                     moving,
-                    MoveType::Normal,
+                    MoveType::Normal
                 );
             }
             PieceType::Rook => {
@@ -814,7 +814,7 @@ impl Piece {
                     8i8,
                     board,
                     moving,
-                    MoveType::Normal,
+                    MoveType::Normal
                 );
             }
         }
@@ -828,7 +828,7 @@ impl Piece {
         range: i8,
         board: &Board,
         moving: bool,
-        move_type: MoveType,
+        move_type: MoveType
     ) -> Vec<Move> {
         let mut possible_moves = Vec::new();
 
@@ -878,7 +878,7 @@ impl Piece {
                                             .play_history
                                             .iter()
                                             .map(|mov| mov.clone())
-                                            .collect(),
+                                            .collect()
                                     };
                                     if piece.can_check(king_position.clone(), &board2) {
                                         king_gets_threatened = true;
@@ -909,7 +909,7 @@ impl Piece {
                                     self.position.clone(),
                                     position_moving_to.clone(),
                                     true,
-                                    move_type,
+                                    move_type
                                 ));
                             }
                             break;
@@ -920,7 +920,7 @@ impl Piece {
                             self.position.clone(),
                             position_moving_to.clone(),
                             false || move_type == MoveType::Passant(Position::new(1, 1)),
-                            move_type,
+                            move_type
                         ));
                     }
                     None => {
@@ -963,7 +963,7 @@ impl Piece {
 pub struct Board {
     pieces: Vec<Piece>,
     current_turn: Color,
-    play_history: Vec<Move>,
+    play_history: Vec<Move>
 }
 
 impl Board {
@@ -971,7 +971,7 @@ impl Board {
         Board {
             pieces,
             current_turn: Color::White,
-            play_history: Vec::new(),
+            play_history: Vec::new()
         }
     }
 
@@ -998,10 +998,10 @@ impl Board {
                         .map(|mov| {
                             (
                                 mov.end_position.clone(),
-                                mov.move_type == MoveType::Promotion,
+                                mov.move_type == MoveType::Promotion
                             )
                         })
-                        .collect(),
+                        .collect()
                 )
             })
             .collect();
@@ -1053,7 +1053,7 @@ impl Board {
                 'q' => piece_type = PieceType::Queen,
                 'k' => piece_type = PieceType::King,
                 'p' => piece_type = PieceType::Pawn,
-                _ => unreachable!("Char {} does not match a piece type", piece_prototype.1),
+                _ => unreachable!("Char {} does not match a piece type", piece_prototype.1)
             }
 
             &standard_layout.push(Piece {
@@ -1062,7 +1062,7 @@ impl Board {
                     y: piece_prototype.3,
                 },
                 color: piece_prototype.0,
-                piece_type: piece_type.clone(),
+                piece_type: piece_type.clone()
             });
         }
         return standard_layout;
@@ -1090,7 +1090,7 @@ impl Board {
         &mut self,
         piece_position: Position,
         target_position: Position,
-        promote_to: Option<PieceType>,
+        promote_to: Option<PieceType>
     ) -> Result<(), String> {
         let piece_color = self.get_piece_at(piece_position).unwrap().color.clone();
 
@@ -1139,12 +1139,12 @@ impl Board {
                                     .set_position(possible_move.end_position.clone());
                                 self.get_piece_at_mut(Position::new(
                                     if queenside { 1 } else { 8 },
-                                    piece_move.0.position.y,
+                                    piece_move.0.position.y
                                 ))
                                 .unwrap()
                                 .set_position(Position::new(
                                     if queenside { 4 } else { 6 },
-                                    piece_move.0.position.y,
+                                    piece_move.0.position.y
                                 ));
                             }
                             MoveType::Promotion => {
@@ -1180,7 +1180,6 @@ impl Board {
         if !found_piece {
             return Err(format!("Didn't find a piece at {}", piece_position));
         }
-
         Ok(())
     }
 
@@ -1211,11 +1210,11 @@ impl Board {
         self.move_piece_at(
             Position::new(
                 (*strings.get(0).unwrap() as u32 - 96) as u8,
-                (*strings.get(1).unwrap() as u32 - 48) as u8,
+                (*strings.get(1).unwrap() as u32 - 48) as u8
             ),
             Position::new(
                 (*strings.get(2).unwrap() as u32 - 96) as u8,
-                (*strings.get(3).unwrap() as u32 - 48) as u8,
+                (*strings.get(3).unwrap() as u32 - 48) as u8
             ),
             match strings.get(4) {
                 Some(letter) => match *letter {
@@ -1227,8 +1226,8 @@ impl Board {
                     'K' => Some(PieceType::King),
                     _ => None,
                 },
-                None => None,
-            },
+                None => None
+            }
         )?;
 
         match self.current_turn {
@@ -1239,7 +1238,6 @@ impl Board {
                 self.current_turn = Color::Black;
             }
         }
-
         Ok(())
     }
 
@@ -1250,7 +1248,7 @@ impl Board {
         let mut king_piece: &Piece = &Piece {
             position: Position::new(1, 1),
             piece_type: PieceType::King,
-            color: self.current_turn.clone(),
+            color: self.current_turn.clone()
         };
 
         for piece in &self.pieces {
@@ -1324,5 +1322,5 @@ pub enum GameState {
     Normal,
     Check(Color),
     Checkmate(Color),
-    Draw,
+    Draw
 }
