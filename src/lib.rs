@@ -1239,7 +1239,6 @@ impl Board {
                 self.current_turn = Color::Black;
             }
         }
-
         Ok(())
     }
 
