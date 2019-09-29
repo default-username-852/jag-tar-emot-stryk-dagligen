@@ -1180,7 +1180,6 @@ impl Board {
         if !found_piece {
             return Err(format!("Didn't find a piece at {}", piece_position));
         }
-
         Ok(())
     }
 
