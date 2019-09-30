@@ -1092,7 +1092,11 @@ impl Board {
         target_position: Position,
         promote_to: Option<PieceType>
     ) -> Result<(), String> {
-        let piece_color = self.get_piece_at(piece_position).unwrap().color.clone();
+        let piece_color;
+        match self.get_piece_at(piece_position) {
+            Some(piece) => { piece_color = self.get_piece_at(piece_position).unwrap().color.clone(); }
+            None => { return Err("No piece found".to_string()) }
+        }
 
         if !(piece_color == self.current_turn) {
             return Err(format!(
